@@ -1,0 +1,10 @@
+com\lms\dto\ApiResponse.class
+com\lms\model\Member.class
+com\lms\service\LibraryService.class
+com\lms\dto\BookRequest.class
+com\lms\LmsApplication.class
+com\lms\model\Book.class
+com\lms\dto\MemberRequest.class
+com\lms\controller\MemberController.class
+com\lms\controller\BookController.class
+com\lms\dto\IssueReturnRequest.class

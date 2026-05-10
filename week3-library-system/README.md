@@ -1,6 +1,6 @@
 # Library Management System — Week 3
 
-A console-based Library Management System built in Java.
+A REST API-based Library Management System built with **Spring Boot** and **Java 25**.
 
 ## Features
 
@@ -11,41 +11,105 @@ A console-based Library Management System built in Java.
 - **Availability Tracking**: Track total and available copies of each book
 - **Sample Data**: Pre-loaded with 5 books and 3 members for testing
 
+## Tech Stack
+
+- Java 25
+- Spring Boot 3.5.0
+- Maven (with wrapper)
+
+## How to Run
+
+```bash
+cd week3-library-system
+.\mvnw.cmd spring-boot:run
+```
+
+Server starts at: **http://localhost:8080**
+
+## API Endpoints
+
+### Books
+
+| Method   | Endpoint                  | Description          | Body                                                                 |
+|----------|---------------------------|----------------------|----------------------------------------------------------------------|
+| `GET`    | `/api/books`              | Get all books        | —                                                                    |
+| `GET`    | `/api/books/{isbn}`       | Get book by ISBN     | —                                                                    |
+| `POST`   | `/api/books`              | Add a new book       | `{"isbn":"...","title":"...","author":"...","totalCopies":3}`        |
+| `DELETE` | `/api/books/{isbn}`       | Remove a book        | —                                                                    |
+| `GET`    | `/api/books/search?q=...` | Search books         | —                                                                    |
+| `POST`   | `/api/books/issue`        | Issue book to member | `{"isbn":"...","memberId":"..."}`                                   |
+| `POST`   | `/api/books/return`       | Return a book        | `{"isbn":"...","memberId":"..."}`                                   |
+
+### Members
+
+| Method   | Endpoint               | Description         | Body                                              |
+|----------|------------------------|---------------------|---------------------------------------------------|
+| `GET`    | `/api/members`         | Get all members     | —                                                 |
+| `GET`    | `/api/members/{id}`    | Get member by ID    | —                                                 |
+| `POST`   | `/api/members`         | Register a member   | `{"memberId":"...","name":"...","email":"..."}`   |
+| `DELETE` | `/api/members/{id}`    | Remove a member     | —                                                 |
+
+## Testing with Postman
+
+1. Start the server: `.\mvnw.cmd spring-boot:run`
+2. Open Postman
+3. Use `http://localhost:8080` as base URL
+4. Set `Content-Type: application/json` for POST requests
+
+### Example: Add a Book (POST)
+```
+POST http://localhost:8080/api/books
+Content-Type: application/json
+
+{
+  "isbn": "978-0-07-246352-3",
+  "title": "Data Structures and Algorithms",
+  "author": "Narasimha Karumanchi",
+  "totalCopies": 5
+}
+```
+
+### Example: Issue a Book (POST)
+```
+POST http://localhost:8080/api/books/issue
+Content-Type: application/json
+
+{
+  "isbn": "978-0-13-235088-4",
+  "memberId": "M001"
+}
+```
+
+### Example: Search Books (GET)
+```
+GET http://localhost:8080/api/books/search?q=java
+```
+
 ## Project Structure
 
 ```
 week3-library-system/
+├── pom.xml
+├── mvnw.cmd
 ├── src/
-│   ├── Book.java       # Book model (ISBN, title, author, copies)
-│   ├── Member.java     # Member model (ID, name, email, borrowed books)
-│   ├── Library.java    # Core service (CRUD, issue/return, search)
-│   └── Main.java       # Console UI with menu-driven interface
-├── out/                # Compiled .class files
+│   ├── main/
+│   │   ├── java/com/lms/
+│   │   │   ├── LmsApplication.java
+│   │   │   ├── model/
+│   │   │   │   ├── Book.java
+│   │   │   │   └── Member.java
+│   │   │   ├── dto/
+│   │   │   │   ├── BookRequest.java
+│   │   │   │   ├── MemberRequest.java
+│   │   │   │   ├── IssueReturnRequest.java
+│   │   │   │   └── ApiResponse.java
+│   │   │   ├── service/
+│   │   │   │   └── LibraryService.java
+│   │   │   └── controller/
+│   │   │       ├── BookController.java
+│   │   │       └── MemberController.java
+│   │   └── resources/
+│   │       └── application.properties
+│   └── Book.java, Member.java, Library.java, Main.java  (legacy console version)
 └── README.md
 ```
-
-## How to Run
-
-1. **Compile**:
-   ```bash
-   javac -d out src/*.java
-   ```
-2. **Run**:
-   ```bash
-   java -cp out Main
-   ```
-
-## Menu Options
-
-| Option | Description         |
-|--------|---------------------|
-| 1      | Add Book            |
-| 2      | Remove Book         |
-| 3      | Search Books        |
-| 4      | Display All Books   |
-| 5      | Register Member     |
-| 6      | Remove Member       |
-| 7      | Display All Members |
-| 8      | Issue Book          |
-| 9      | Return Book         |
-| 0      | Exit                |
